@@ -44,7 +44,7 @@ button:focus-visible, select:focus-visible, input:focus-visible, textarea:focus-
 }
 
 .brand { display: flex; align-items: center; gap: 9px; min-width: 0; }
-.brand img { width: 43px; height: 43px; object-fit: contain; filter: brightness(0) invert(1); flex: none; }
+.brand img { width: 43px; height: 43px; object-fit: contain; border-radius: 9px; flex: none; }
 .brand div { display: grid; line-height: 1; min-width: 0; }
 .brand-kicker { font-size: 8px; letter-spacing: 0.18em; opacity: 0.8; white-space: nowrap; }
 .brand strong { font-family: Georgia, "Times New Roman", serif; font-size: 24px; font-weight: 500; letter-spacing: 0.045em; }
