@@ -97,7 +97,12 @@
     scene.fog = new THREE.Fog(0x0a2530, larguraMundo * 1.1, larguraMundo * 2.6);
 
     const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 2000);
-    camera.position.set(0, alturaMundo * 0.85, alturaMundo * 0.95);
+    // visao quase vertical (de cima pra baixo) — isso e uma planta 2D, nao um
+    // predio real; um angulo inclinado (como era antes) cria paralaxe entre
+    // os marcadores (que ficam um pouco acima do plano) e o lote desenhado,
+    // e piora bastante se o usuario girar a camera (rotacao desativada
+    // abaixo por isso mesmo).
+    camera.position.set(0, alturaMundo * 1.35, alturaMundo * 0.02);
 
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
     renderer.setPixelRatio(Math.min(global.devicePixelRatio || 1, 2));
@@ -141,6 +146,7 @@
     controls.minDistance = larguraMundo * 0.12;
     controls.maxDistance = larguraMundo * 1.6;
     controls.maxPolarAngle = Math.PI / 2.05; // não deixa passar por baixo do "chão"
+    controls.enableRotate = false; // planta 2D: só zoom/arrastar, sem girar (girar causava o desalinhamento dos marcadores)
     controls.update();
 
     const marcadores = [];
@@ -151,7 +157,7 @@
       const sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: criarTexturaMarcador(cor, false), depthTest: true, sizeAttenuation: true }));
       const u = ponto.x / opts.larguraPx;
       const v = ponto.y / opts.alturaPx;
-      sprite.position.set((u - 0.5) * larguraMundo, 0.8, (v - 0.5) * alturaMundo);
+      sprite.position.set((u - 0.5) * larguraMundo, 0.08, (v - 0.5) * alturaMundo);
       const escala = larguraMundo * 0.018;
       sprite.scale.set(escala, escala, 1);
       sprite.userData.loteId = ponto.lote_id;
