@@ -133,7 +133,7 @@
             showToast("Mapa interativo não disponível para este empreendimento.");
             return;
         }
-        mapa3dInstance = window.SKLMapa3D.init(elements.mapa3dContainer, {
+        mapa3dInstance = window.SKLMapaImagem.init(elements.mapa3dContainer, {
             imagemUrl: mapa3dDados.imagem_url,
             larguraPx: mapa3dDados.largura_px,
             alturaPx: mapa3dDados.altura_px,
