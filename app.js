@@ -130,7 +130,7 @@
         if (!mapa3dDados) mapa3dDados = await window.SKLOnline.carregarMapa3D();
         if (!mapa3dDados) {
             elements.mapa3dOverlay.hidden = true;
-            showToast("Planta 3D não disponível para este empreendimento.");
+            showToast("Mapa interativo não disponível para este empreendimento.");
             return;
         }
         mapa3dInstance = window.SKLMapa3D.init(elements.mapa3dContainer, {
