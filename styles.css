@@ -482,6 +482,14 @@ summary { color: var(--navy); cursor: pointer; font-weight: 850; }
 .demo-ribbon{position:fixed;z-index:5000;right:12px;bottom:calc(22px + env(safe-area-inset-bottom));max-width:200px;padding:7px 12px;border-radius:14px;background:#E6B857;color:#071F3B;font-size:10px;font-weight:900;letter-spacing:.06em;line-height:1.35;text-align:center;box-shadow:0 6px 20px rgba(7,31,59,.2)}
 @media (max-width:700px){.demo-ribbon{max-width:150px;font-size:8.5px;padding:6px 9px}}
 
+.login-links{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.login-links .text-button{padding:6px 0}
+.install-box{margin-top:8px;padding-top:14px;border-top:1px dashed #dde3e6;text-align:center}
+.install-box:not([hidden]){display:block}
+.install-button{width:100%;background:var(--sand);color:var(--ink);border:0;border-radius:11px;padding:13px 18px;font-size:15px;font-weight:800;cursor:pointer;box-shadow:0 6px 16px rgba(201,160,99,.32)}
+.install-button:hover{background:#b98e57}
+.install-hint{margin:10px 0 0!important;font-size:12px;color:var(--muted);line-height:1.45}
+
 /* ===== Seletor de empreendimento ===== */
 .picker-card { width: min(480px, 100%); display: grid; gap: 14px; padding: 26px 23px; border-radius: 22px; background: rgba(255,255,255,.98); box-shadow: 0 24px 70px rgba(0,0,0,.31); }
 .picker-card h1 { margin: 0; color: var(--navy); font-family: Georgia, serif; font-size: 24px; }

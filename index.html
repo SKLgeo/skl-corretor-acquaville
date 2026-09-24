@@ -24,8 +24,27 @@
         <label><span>E-mail</span><input id="brokerEmailInput" type="email" autocomplete="username" required /></label>
         <label><span>Senha</span><input id="brokerPasswordInput" type="password" autocomplete="current-password" required /></label>
         <button class="primary-button" type="submit">Entrar</button>
-        <button id="showBrokerActivation" class="text-button" type="button">Primeiro acesso com convite</button>
+        <div class="login-links"><button id="showBrokerActivation" class="text-button" type="button">Primeiro acesso com convite</button><button id="showBrokerRecover" class="text-button" type="button">Esqueci minha senha</button></div>
         <div id="brokerLoginMessage" class="auth-message" hidden></div>
+        <div class="install-box" hidden>
+          <button id="installAuthButton" class="install-button" type="button">⬇ Baixar / instalar aplicativo</button>
+          <p class="install-hint"></p>
+        </div>
+      </form>
+      <form id="brokerRecoverForm" class="auth-card" hidden>
+        <span class="eyebrow">RECUPERAR SENHA</span><h1>Esqueci minha senha</h1>
+        <p>Informe o e-mail da sua conta. Vamos te enviar um link pra você definir uma senha nova.</p>
+        <label><span>E-mail</span><input id="brokerRecoverEmail" type="email" autocomplete="username" required /></label>
+        <button class="primary-button" type="submit">Enviar link de recuperação</button>
+        <button class="text-button back-auth" type="button">Voltar</button>
+        <div id="brokerRecoverMessage" class="auth-message" hidden></div>
+      </form>
+      <form id="brokerRecoverNewPasswordForm" class="auth-card" hidden>
+        <span class="eyebrow">NOVA SENHA</span><h1>Defina sua nova senha</h1>
+        <p>Você veio de um link de recuperação. Escolha uma senha nova pra continuar.</p>
+        <label><span>Nova senha</span><input id="brokerRecoverNewPassword" type="password" autocomplete="new-password" required minlength="6" /></label>
+        <button class="primary-button" type="submit">Salvar nova senha</button>
+        <div id="brokerRecoverNewPasswordMessage" class="auth-message" hidden></div>
       </form>
       <form id="brokerActivationForm" class="auth-card" hidden>
         <span class="eyebrow">PRIMEIRO ACESSO</span><h1>Crie seu acesso</h1>

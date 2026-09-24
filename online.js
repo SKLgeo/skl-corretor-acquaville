@@ -18,6 +18,7 @@
             storageKey: "sklaqv-auth"
         }
     });
+    let modoRecuperacaoSenha = /type=recovery/.test(window.location.hash);
     window.SKLPush = {
         onToken: async token => {
             if (!token) return;
@@ -58,8 +59,10 @@
         element.classList.toggle("success", !isError);
         element.hidden = !message;
     }
+    const recoverForm = $("brokerRecoverForm");
+    const recoverNewPasswordForm = $("brokerRecoverNewPasswordForm");
     function showAuthForm(form) {
-        [ loginForm, activationForm ].forEach(item => {
+        [ loginForm, activationForm, recoverForm, recoverNewPasswordForm ].forEach(item => {
             item.hidden = item !== form;
         });
     }
@@ -70,6 +73,46 @@
         showAuthForm(loginForm);
         if (message) setMessage($("brokerLoginMessage"), message);
     }
+    function urlWebPublica() {
+        return window.NativeBridge ? "https://corretor-acquaville.sklgeosolucoes.com.br/" : window.location.origin + window.location.pathname;
+    }
+    function mostrarRecuperacaoNovaSenha() {
+        authView.hidden = false;
+        empreendimentoPicker.hidden = true;
+        document.getElementById("app").hidden = true;
+        showAuthForm(recoverNewPasswordForm);
+    }
+    recoverForm.addEventListener("submit", async event => {
+        event.preventDefault();
+        setMessage($("brokerRecoverMessage"), "");
+        try {
+            const {error: error} = await sb.auth.resetPasswordForEmail($("brokerRecoverEmail").value.trim(), {
+                redirectTo: urlWebPublica()
+            });
+            if (error) throw error;
+            setMessage($("brokerRecoverMessage"), "Se esse e-mail tiver uma conta, chega nele um link pra definir a senha nova em alguns instantes.", false);
+        } catch (error) {
+            setMessage($("brokerRecoverMessage"), traduzErro(error.message));
+        }
+    });
+    recoverNewPasswordForm.addEventListener("submit", async event => {
+        event.preventDefault();
+        setMessage($("brokerRecoverNewPasswordMessage"), "");
+        try {
+            const {error: error} = await sb.auth.updateUser({
+                password: $("brokerRecoverNewPassword").value
+            });
+            if (error) throw error;
+            await sb.auth.signOut();
+            modoRecuperacaoSenha = false;
+            history.replaceState(null, "", window.location.pathname);
+            recoverNewPasswordForm.reset();
+            showLogin("Senha alterada com sucesso. Entre com a senha nova.");
+        } catch (error) {
+            setMessage($("brokerRecoverNewPasswordMessage"), traduzErro(error.message));
+        }
+    });
+    $("showBrokerRecover").addEventListener("click", () => showAuthForm(recoverForm));
     function enterApp() {
         authView.hidden = true;
         empreendimentoPicker.hidden = true;
@@ -191,6 +234,7 @@
         }
     }
     async function restoreSession() {
+        if (modoRecuperacaoSenha) return;
         const {data: data} = await sb.auth.getSession();
         if (!data?.session) return showLogin();
         try {
@@ -784,5 +828,12 @@
         carregarMapa3D: carregarMapa3D,
         carregarFormasPagamento: carregarFormasPagamento
     };
+    sb.auth.onAuthStateChange(evento => {
+        if (evento === "PASSWORD_RECOVERY") {
+            modoRecuperacaoSenha = true;
+            mostrarRecuperacaoNovaSenha();
+        }
+    });
+    if (modoRecuperacaoSenha) mostrarRecuperacaoNovaSenha();
     restoreSession();
 })();

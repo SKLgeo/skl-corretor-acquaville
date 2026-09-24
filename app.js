@@ -47,6 +47,8 @@
         syncStatus: $("syncStatusButton"),
         syncStatusText: $("syncStatusText"),
         install: $("installButton"),
+        installAuth: $("installAuthButton"),
+        installBox: document.querySelector(".install-box"),
         installDialog: $("installDialog"),
         installInstructions: $("installInstructions"),
         toast: $("toast"),
@@ -1125,13 +1127,18 @@
     };
     const isStandalone = window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true;
     const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
-    if (!isStandalone && !isNativeAndroid) elements.install.hidden = false;
+    const installButtons = [ elements.install, elements.installAuth ].filter(Boolean);
+    function mostrarBotoesInstalar() {
+        elements.install.hidden = false;
+        if (elements.installBox) elements.installBox.hidden = false;
+    }
+    if (!isStandalone && !isNativeAndroid) mostrarBotoesInstalar();
     window.addEventListener("beforeinstallprompt", event => {
         event.preventDefault();
         deferredInstallPrompt = event;
-        elements.install.hidden = false;
+        mostrarBotoesInstalar();
     });
-    elements.install.addEventListener("click", async () => {
+    installButtons.forEach(button => button.addEventListener("click", async () => {
         if (deferredInstallPrompt) {
             deferredInstallPrompt.prompt();
             await deferredInstallPrompt.userChoice;
@@ -1140,9 +1147,10 @@
         }
         elements.installInstructions.innerHTML = isIOS ? "No Safari, toque em <strong>Compartilhar</strong> e depois em <strong>Adicionar à Tela de Início</strong>." : "Abra o menu do navegador e escolha <strong>Instalar aplicativo</strong> ou <strong>Adicionar à tela inicial</strong>.";
         elements.installDialog.showModal();
-    });
+    }));
     window.addEventListener("appinstalled", () => {
         elements.install.hidden = true;
+        if (elements.installBox) elements.installBox.hidden = true;
         showToast("Aplicativo instalado.");
     });
     if ("serviceWorker" in navigator && location.protocol.startsWith("http") && !isNativeAndroid) {
