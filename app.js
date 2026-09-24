@@ -144,9 +144,25 @@
                 if (!info) return;
                 fecharMapa3D();
                 selectLot(info.quadra, info.lote, true);
+            },
+            onAbrirInformativo(ponto) {
+                mostrarPontoInformativo(ponto);
             }
         });
         elements.mapa3dLoading.hidden = true;
+    }
+    function mostrarPontoInformativo(ponto) {
+        const dialog = $("pontoInfoDialog");
+        if (!dialog) return;
+        $("pontoInfoTitulo").textContent = ponto.titulo || "Ponto de interesse";
+        const img = $("pontoInfoImagem");
+        if (ponto.imagem_url) {
+            img.src = ponto.imagem_url;
+            img.hidden = false;
+        } else {
+            img.hidden = true;
+        }
+        dialog.showModal();
     }
     function fecharMapa3D() {
         elements.mapa3dOverlay.hidden = true;
