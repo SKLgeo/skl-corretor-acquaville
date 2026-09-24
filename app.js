@@ -151,19 +151,42 @@
         });
         elements.mapa3dLoading.hidden = true;
     }
+    let pontoInfoImagens = [];
+    let pontoInfoIndice = 0;
+    function imagensDoPonto(ponto) {
+        if (Array.isArray(ponto.imagens) && ponto.imagens.length) return ponto.imagens;
+        return ponto.imagem_url ? [ponto.imagem_url] : [];
+    }
+    function atualizarFotoPontoInfo() {
+        const img = $("pontoInfoImagem");
+        const total = pontoInfoImagens.length;
+        if (total === 0) {
+            img.hidden = true;
+        } else {
+            img.src = pontoInfoImagens[pontoInfoIndice];
+            img.hidden = false;
+        }
+        $("pontoInfoContador").textContent = total > 1 ? `${pontoInfoIndice + 1} / ${total}` : "";
+        $("pontoInfoPrevButton").hidden = total <= 1;
+        $("pontoInfoNextButton").hidden = total <= 1;
+    }
     function mostrarPontoInformativo(ponto) {
         const dialog = $("pontoInfoDialog");
         if (!dialog) return;
         $("pontoInfoTitulo").textContent = ponto.titulo || "Ponto de interesse";
-        const img = $("pontoInfoImagem");
-        if (ponto.imagem_url) {
-            img.src = ponto.imagem_url;
-            img.hidden = false;
-        } else {
-            img.hidden = true;
-        }
+        pontoInfoImagens = imagensDoPonto(ponto);
+        pontoInfoIndice = 0;
+        atualizarFotoPontoInfo();
         dialog.showModal();
     }
+    $("pontoInfoPrevButton")?.addEventListener("click", () => {
+        pontoInfoIndice = (pontoInfoIndice - 1 + pontoInfoImagens.length) % pontoInfoImagens.length;
+        atualizarFotoPontoInfo();
+    });
+    $("pontoInfoNextButton")?.addEventListener("click", () => {
+        pontoInfoIndice = (pontoInfoIndice + 1) % pontoInfoImagens.length;
+        atualizarFotoPontoInfo();
+    });
     function fecharMapa3D() {
         elements.mapa3dOverlay.hidden = true;
         if (mapa3dInstance) {

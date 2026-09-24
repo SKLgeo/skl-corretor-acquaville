@@ -467,7 +467,12 @@
         <button class="close-button dialog-close" type="button" aria-label="Fechar">×</button>
         <span class="eyebrow">PONTO DE INTERESSE</span>
         <h2 id="pontoInfoTitulo">Ponto de interesse</h2>
-        <img id="pontoInfoImagem" alt="" style="width:100%;border-radius:12px;margin-top:10px" />
+        <div class="ponto-info-foto-wrap">
+          <img id="pontoInfoImagem" alt="" hidden />
+          <button id="pontoInfoPrevButton" type="button" class="ponto-info-nav ponto-info-prev" aria-label="Foto anterior" hidden>‹</button>
+          <button id="pontoInfoNextButton" type="button" class="ponto-info-nav ponto-info-next" aria-label="Próxima foto" hidden>›</button>
+        </div>
+        <div id="pontoInfoContador" class="ponto-info-contador"></div>
       </div>
     </dialog>
 

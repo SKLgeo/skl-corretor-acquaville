@@ -9,7 +9,7 @@
     // mesmo que a conta logada também tenha vínculo em outros empreendimentos
     // (Base, Aurora, etc.) por algum outro motivo.
     const SLUGS_PERMITIDOS = [ "acquaville" ];
-    const APP_VERSION = "0.2.2";
+    const APP_VERSION = "0.2.3";
     if ($("brokerAppVersion")) $("brokerAppVersion").textContent = APP_VERSION;
     const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
         auth: {
