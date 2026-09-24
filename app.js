@@ -170,6 +170,7 @@
             mapa3dInstance.destruir();
             mapa3dInstance = null;
         }
+        mapa3dDados = null;
     }
     if (!lots || !Array.isArray(lots.features)) {
         document.body.innerHTML = '<main class="fatal-error">Não foi possível carregar a base de lotes.</main>';
