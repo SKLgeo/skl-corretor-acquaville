@@ -20,7 +20,7 @@
     });
     let modoRecuperacaoSenha = /type=recovery/.test(window.location.hash);
     window.SKLPush = {
-        onToken: async token => {
+        onToken: async (token, plataforma = "android") => {
             if (!token) return;
             try {
                 const {data: userData} = await sb.auth.getUser();
@@ -28,7 +28,7 @@
                 await sb.from("push_tokens").upsert({
                     usuario_id: userData.user.id,
                     token: token,
-                    plataforma: "android",
+                    plataforma: plataforma,
                     atualizado_em: (new Date).toISOString()
                 }, {
                     onConflict: "token"
@@ -124,6 +124,7 @@
         sync(false);
         openRealtime();
         window.NativeBridge?.requestPushToken?.();
+        window.SKLPushWeb?.registrar();
         sb.from("mapas_3d").select("id").eq("empreendimento_id", empreendimentoId).eq("ativo", true).maybeSingle().then(({data: mapa3d}) => {
             if (mapa3d) window.SKLApp.showMapa3DButton?.();
         });
@@ -144,6 +145,7 @@
         $("vtConnectionText").textContent = "Conectado à Central";
         window.SKLVertical.enter(sb, currentEmpreendimento);
         window.NativeBridge?.requestPushToken?.();
+        window.SKLPushWeb?.registrar();
     }
     function updateConnection(isOnline, text) {
         online = Boolean(isOnline);
