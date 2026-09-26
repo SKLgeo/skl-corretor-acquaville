@@ -124,7 +124,7 @@
         sync(false);
         openRealtime();
         window.NativeBridge?.requestPushToken?.();
-        window.SKLPushWeb?.registrar();
+        window.SKLPushWeb?.oferecer();
         sb.from("mapas_3d").select("id").eq("empreendimento_id", empreendimentoId).eq("ativo", true).maybeSingle().then(({data: mapa3d}) => {
             if (mapa3d) window.SKLApp.showMapa3DButton?.();
         });
@@ -145,7 +145,7 @@
         $("vtConnectionText").textContent = "Conectado à Central";
         window.SKLVertical.enter(sb, currentEmpreendimento);
         window.NativeBridge?.requestPushToken?.();
-        window.SKLPushWeb?.registrar();
+        window.SKLPushWeb?.oferecer();
     }
     function updateConnection(isOnline, text) {
         online = Boolean(isOnline);
