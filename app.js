@@ -68,7 +68,7 @@
     let mapa3dInstance = null;
     let mapa3dDados = null;
     let formasPagamentoDados = null;
-    const SERIE_TIPO_LABEL = { ato: "Ato", sinal: "Sinal", parcelas: "Parcelas", financiamento: "Financiamento", chaves: "Chaves", outro: "Outro" };
+    const SERIE_TIPO_LABEL = { ato: "Ato", sinal: "Sinal", parcelas: "Parcelas", balao: "Balão", financiamento: "Financiamento", chaves: "Chaves", outro: "Outro" };
     const BANKING_TIPO_LABEL = { pix: "PIX", boleto: "Boleto", deposito: "Depósito/TED", outro: "Outro" };
     function formatMoneyBR(value) {
         const n = Number(value);
