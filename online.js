@@ -9,7 +9,7 @@
     // mesmo que a conta logada também tenha vínculo em outros empreendimentos
     // (Base, Aurora, etc.) por algum outro motivo.
     const SLUGS_PERMITIDOS = [ "acquaville" ];
-    const APP_VERSION = "0.2.3";
+    const APP_VERSION = "0.2.4";
     if ($("brokerAppVersion")) $("brokerAppVersion").textContent = APP_VERSION;
     const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
         auth: {
@@ -538,6 +538,7 @@
         if (!requestContext || requestSubmitting) return;
         const customer = $("requestCustomerInput").value.trim();
         if (customer.length < 3) return setMessage($("requestMessage"), "Informe o nome do cliente.");
+        if (!$("requestConsentInput").checked) return setMessage($("requestMessage"), "Confirme o aviso de privacidade (LGPD) antes de enviar.");
         requestSubmitting = true;
         $("submitRequestButton").disabled = true;
         try {
@@ -555,7 +556,8 @@
                 p_cliente_endereco: $("requestAddressInput").value,
                 p_forma_pagamento_id: formaPagamentoId,
                 p_forma_pagamento_nome: formaPagamentoNome,
-                p_simulacao: (window.SKLSimulador && alvoSimulacaoAtual() && window.SKLSimulador.escolhida(alvoSimulacaoAtual().alvo)) || null
+                p_simulacao: (window.SKLSimulador && alvoSimulacaoAtual() && window.SKLSimulador.escolhida(alvoSimulacaoAtual().alvo)) || null,
+                p_consentimento_lgpd: $("requestConsentInput").checked
             };
             if (requestContext.kind === "lote") {
                 const {data: loteRow, error: loteError} = await sb.from("lotes").select("id").eq("empreendimento_id", empreendimentoId).eq("chave", requestContext.lotKey).single();
@@ -575,6 +577,7 @@
             [ $("requestCustomerInput"), $("requestPhoneInput"), $("requestCpfInput"), $("requestEmailInput"), $("requestAddressInput"), $("requestNoteInput") ].forEach(input => {
                 input.value = "";
             });
+            $("requestConsentInput").checked = false;
             if (paymentSelect) paymentSelect.selectedIndex = 0;
             if (window.SKLSimulador && alvoSimulacaoAtual()) window.SKLSimulador.limparEscolhida(alvoSimulacaoAtual().alvo);
             requestDialog.close();
@@ -740,7 +743,7 @@
         });
     }
     function traduzErro(message) {
-        const codigo = /^(REQUEST_PENDING|RESERVA_BLOQUEADA|RESERVA_ATIVA|REQUEST_EXPIRED):\s*(.*)$/s.exec(message || "");
+        const codigo = /^(REQUEST_PENDING|RESERVA_BLOQUEADA|RESERVA_ATIVA|REQUEST_EXPIRED|CONSENT_REQUIRED):\s*(.*)$/s.exec(message || "");
         if (codigo) return codigo[2];
         const mapa = {
             "Invalid login credentials": "E-mail ou senha incorretos.",

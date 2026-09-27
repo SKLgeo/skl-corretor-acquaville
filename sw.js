@@ -1,4 +1,4 @@
-const CACHE_NAME = "skl-acquaville-corretor-v2";
+const CACHE_NAME = "skl-acquaville-corretor-v3";
 const CORE_ASSETS = [
   "./",
   "./index.html",
