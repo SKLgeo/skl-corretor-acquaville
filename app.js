@@ -15,8 +15,6 @@
         lotCard: $("lotCard"),
         lotTitle: $("lotTitle"),
         lotArea: $("lotArea"),
-        lotPerimeter: $("lotPerimeter"),
-        lotFrontage: $("lotFrontage"),
         lotAccess: $("lotAccess"),
         lotCoordinates: $("lotCoordinates"),
         distanceRow: $("distanceRow"),
@@ -26,8 +24,6 @@
         statusBadge: $("statusBadge"),
         commercialInfo: $("commercialInfo"),
         favorite: $("favoriteButton"),
-        memorial: $("memorialButton"),
-        details: $("detailsButton"),
         technicalReview: $("technicalReviewButton"),
         shareCard: $("shareCardButton"),
         savedDialog: $("savedDialog"),
@@ -348,8 +344,6 @@
     elements.syncStatus.addEventListener("click", () => syncRemoteStatuses(true));
     elements.saveLocalStatus.addEventListener("click", saveLocalCommercialRecord);
     elements.favorite.addEventListener("click", toggleFavorite);
-    elements.memorial.addEventListener("click", openSelectedMemorial);
-    elements.details.addEventListener("click", openDetailsDialog);
     elements.technicalReview.addEventListener("click", openDetailsDialog);
     elements.shareCard.addEventListener("click", shareCommercialCard);
     document.querySelectorAll(".dialog-close").forEach(button => {
@@ -492,8 +486,6 @@
         };
         elements.lotTitle.textContent = `Quadra ${quadra} · Lote ${lote}`;
         elements.lotArea.textContent = `${formatNumber(area)} m²`;
-        elements.lotPerimeter.textContent = props.perimeter_m ? `${formatNumber(props.perimeter_m)} m` : "—";
-        elements.lotFrontage.textContent = props.frontage_m ? `${formatNumber(props.frontage_m)} m` : "Não indicada";
         elements.lotCoordinates.textContent = `${destination.latitude.toFixed(6)}, ${destination.longitude.toFixed(6)}`;
         if (access) {
             const review = access.confidence === "pendente_revisao" ? " · estimado, revisar" : "";
@@ -746,12 +738,6 @@
         });
         elements.reviewSection.hidden = notes.length === 0;
         if (!elements.detailsDialog.open) elements.detailsDialog.showModal();
-    }
-    function openSelectedMemorial() {
-        if (!selectedFeature) return;
-        const props = selectedFeature.properties;
-        const title = `Memorial_Q${String(props.quadra).padStart(2, "0")}_L${String(props.lote).padStart(2, "0")}.pdf`;
-        window.SKLOnline.openMemorial(props.quadra, props.lote, title);
     }
     function openCommercialDialog() {
         updateAdminPanel();

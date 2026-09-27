@@ -283,7 +283,7 @@ textarea { resize: vertical; }
 .metrics-grid {
   margin-top: 13px;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: 1fr;
   gap: 7px;
 }
 .metrics-grid div { min-width: 0; padding: 9px 8px; border-radius: 12px; background: #f3f2ed; }
