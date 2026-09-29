@@ -217,9 +217,9 @@ textarea { resize: vertical; }
 }
 .map-legend span { display: inline-flex; align-items: center; gap: 4px; white-space: nowrap; }
 .map-legend .dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
-.map-legend .dot.disponivel { background: #2f8a56; }
+.map-legend .dot.disponivel { background: #19e065; }
 .map-legend .dot.reservado { background: #d59a22; }
-.map-legend .dot.vendido { background: #bd5147; }
+.map-legend .dot.vendido { background: #ff2222; }
 .map-legend .dot.bloqueado { background: #477fa4; }
 
 .lot-card {

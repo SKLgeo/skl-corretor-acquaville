@@ -210,28 +210,28 @@
     const STATUS = {
         nao_informado: {
             label: "Situação não informada",
-            color: "#0f6174",
-            fill: "#0f6174"
+            color: "#708189",
+            fill: "#708189"
         },
         disponivel: {
             label: "Disponível",
-            color: "#287a4a",
-            fill: "#35a861"
+            color: "#19e065",
+            fill: "#19e065"
         },
         reservado: {
             label: "Reservado",
-            color: "#95600d",
-            fill: "#e0a521"
+            color: "#d59a22",
+            fill: "#d59a22"
         },
         vendido: {
             label: "Vendido",
-            color: "#8d3d35",
-            fill: "#c65349"
+            color: "#ff2222",
+            fill: "#ff2222"
         },
         bloqueado: {
             label: "Bloqueado",
-            color: "#315d89",
-            fill: "#4d83bd"
+            color: "#477fa4",
+            fill: "#477fa4"
         }
     };
     const featuresByKey = new Map;
@@ -400,11 +400,11 @@
         const {quadra: quadra, lote: lote} = feature.properties;
         const state = STATUS[commercialRecordFor(lotKey(quadra, lote)).status];
         return {
-            color: "#f7f4ec",
-            weight: 1.2,
-            opacity: .92,
+            color: state.color,
+            weight: 2,
+            opacity: 1,
             fillColor: state.fill,
-            fillOpacity: state === STATUS.nao_informado ? .12 : .24
+            fillOpacity: .55
         };
     }
     function updateLayerTooltip(feature, layer) {
