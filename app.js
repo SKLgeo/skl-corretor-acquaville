@@ -1143,3 +1143,44 @@
         window.addEventListener("load", () => navigator.serviceWorker.register("./sw.js").catch(() => {}));
     }
 })();
+// Botão/gesto "Voltar" no link (navegador ou app instalado pelo link): fecha a janela ou o mapa
+// que estiver aberto, em vez de sair do app. No app Android isso já é feito do lado nativo
+// (MainActivity), por isso aqui só age quando não há NativeBridge.
+(function () {
+    if (window.NativeBridge) return;
+    const OVERLAYS = [ [ "mapa3dOverlay", "mapa3dCloseButton" ], [ "paymentInfoOverlay", "paymentInfoCloseButton" ] ];
+    function algoAberto() {
+        if (document.querySelector("dialog[open]")) return true;
+        return OVERLAYS.some(([id]) => { const el = document.getElementById(id); return el && !el.hidden; });
+    }
+    function fecharTopo() {
+        const d = document.querySelector("dialog[open]");
+        if (d) {
+            const b = d.querySelector(".dialog-close");
+            if (b) b.click(); else d.close();
+            return;
+        }
+        for (const [id, botao] of OVERLAYS) {
+            const el = document.getElementById(id);
+            if (el && !el.hidden) { document.getElementById(botao)?.click(); return; }
+        }
+    }
+    let guardado = false;
+    function sincronizar() {
+        const aberto = algoAberto();
+        if (aberto && !guardado) {
+            history.pushState({ sklVoltar: 1 }, "");
+            guardado = true;
+        } else if (!aberto && guardado) {
+            guardado = false;
+            history.back();
+        }
+    }
+    window.addEventListener("popstate", () => {
+        if (!guardado) return;
+        guardado = false;
+        fecharTopo();
+        setTimeout(sincronizar, 80);
+    });
+    new MutationObserver(() => setTimeout(sincronizar, 0)).observe(document.body, { subtree: true, attributes: true, attributeFilter: [ "open", "hidden" ] });
+})();

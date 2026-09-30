@@ -720,3 +720,19 @@ summary { color: var(--navy); cursor: pointer; font-weight: 850; }
 .ponto-info-prev{left:8px}
 .ponto-info-next{right:8px}
 .ponto-info-contador{text-align:center;font-size:12px;color:#889;margin-top:6px}
+/* Minhas solicitações — filtros, prazos e resposta da Central */
+.meus-pedidos-filtros{display:flex;gap:6px;overflow-x:auto;padding:2px 0 8px;-webkit-overflow-scrolling:touch}
+.meus-pedidos-chip{flex:0 0 auto;border:1px solid #d6ddd8;background:#fff;color:var(--navy);border-radius:99px;padding:7px 11px;font-weight:700;font-size:12.5px}
+.meus-pedidos-chip b{margin-left:3px;opacity:.75}
+.meus-pedidos-chip.ativo{background:var(--navy);border-color:var(--navy);color:#fff}
+.request-record .status-badge{justify-self:start;margin-top:0}
+.meus-pedidos-prazo{margin:0;font-size:12.5px;color:#7a5a12;background:#fff6df;border-radius:8px;padding:7px 9px}
+.meus-pedidos-prazo.ok{color:#1f6b3d;background:#e3f5ea}
+.meus-pedidos-obs{margin:0;font-size:12.5px;color:#33443b;background:#f1f4f2;border-left:3px solid var(--navy);border-radius:6px;padding:7px 9px}
+.request-record>div:first-child{display:flex;justify-content:space-between;align-items:baseline;gap:8px}.request-record>div:first-child span{color:var(--muted);font-size:12.5px}.request-record>p{margin:0}
+
+/* Mapa interativo: as camadas do mapa (Leaflet, z-index 400-1000) cobriam o cabeçalho com o X */
+.mapa3d-container{isolation:isolate;z-index:0}
+.mapa3d-topbar{z-index:20}
+.mapa3d-legend{z-index:20}
+.mapa3d-loading{z-index:20}
