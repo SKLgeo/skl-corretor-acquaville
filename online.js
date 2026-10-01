@@ -9,7 +9,7 @@
     // mesmo que a conta logada também tenha vínculo em outros empreendimentos
     // (Base, Aurora, etc.) por algum outro motivo.
     const SLUGS_PERMITIDOS = [ "acquaville" ];
-    const APP_VERSION = "0.3.0";
+    const APP_VERSION = "0.3.1";
     if ($("brokerAppVersion")) $("brokerAppVersion").textContent = APP_VERSION;
     const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
         auth: {
@@ -159,7 +159,8 @@
         const {data: data, error: error} = await sb.from("empreendimento_usuarios").select("papel, expira_em, empreendimentos(id, nome, slug, tipo, ativo, config)").eq("usuario_id", uid).eq("ativo", true);
         if (error) throw error;
         const agora = Date.now();
-        return (data || []).filter(v => v.papel === "corretor" && v.empreendimentos?.ativo && (!v.expira_em || new Date(v.expira_em).getTime() >= agora)).filter(v => !SLUGS_OCULTOS_NA_BASE.includes(v.empreendimentos.slug)).filter(v => SLUGS_PERMITIDOS.includes(v.empreendimentos.slug)).map(v => ({
+        // Corretor, controle de vendas e administrador entram no App do Corretor (os da Central também precisam ver o mapa e fazer pedidos).
+        return (data || []).filter(v => [ "corretor", "central_vendas", "administrador" ].includes(v.papel) && v.empreendimentos?.ativo && (!v.expira_em || new Date(v.expira_em).getTime() >= agora)).filter(v => !SLUGS_OCULTOS_NA_BASE.includes(v.empreendimentos.slug)).filter(v => SLUGS_PERMITIDOS.includes(v.empreendimentos.slug)).map(v => ({
             id: v.empreendimentos.id,
             nome: v.empreendimentos.nome,
             slug: v.empreendimentos.slug,
@@ -182,13 +183,23 @@
     function iniciarSimulador(empId) {
         const sim = window.SKLSimulador;
         if (!sim) return;
-        const atualizarBotoes = () => {
-            const visivel = sim.ativo() && sim.condicoes().length > 0;
-            [ "simLotButton", "simUnitButton" ].forEach(id => { if ($(id)) $(id).hidden = !visivel; });
-        };
+        const atualizarBotoes = () => atualizarSimuladorPorStatus();
         if (!iniciarSimulador.ligado) { iniciarSimulador.ligado = true; sim.onEstado(atualizarBotoes); }
         atualizarBotoes();
         sim.init({ sb, empreendimentoId: empId, papel: "corretor", toast: (m) => window.SKLApp?.showToast?.(m) }).then(atualizarBotoes).catch(() => {});
+    }
+    // Simulação só para o que ainda está à venda: lote/apartamento VENDIDO não mostra o botão no
+    // app do corretor (a Central continua vendo e mexendo normalmente).
+    function simuladorLiberado() {
+        const sim = window.SKLSimulador;
+        return !!(sim && sim.ativo() && sim.condicoes().length > 0);
+    }
+    function atualizarSimuladorPorStatus() {
+        const liberado = simuladorLiberado();
+        const lote = window.SKLApp?.getSelectedLot?.();
+        if ($("simLotButton")) $("simLotButton").hidden = !liberado || lote?.record?.status === "vendido";
+        const unidade = window.SKLVertical?.getSelectedUnit?.();
+        if ($("simUnitButton")) $("simUnitButton").hidden = !liberado || unidade?.status === "vendido";
     }
     function alvoSimulacaoAtual() {
         return requestContext && requestContext.sim ? requestContext.sim : null;
@@ -211,7 +222,7 @@
     }
     async function resolverEmpreendimentoEEntrar() {
         const lista = await listarEmpreendimentosDoCorretor();
-        if (!lista.length) throw new Error("Este acesso não pertence a um corretor com empreendimento ativo.");
+        if (!lista.length) throw new Error("Este acesso não tem um empreendimento ativo neste aplicativo.");
         if (lista.length === 1) return entrarNoEmpreendimento(lista[0]);
         let lembrado = null;
         try {
@@ -438,6 +449,7 @@
             if (btnUn) btnUn.hidden = unidade.status !== "disponivel" || !!est;
             pintarBannerReserva($("reservaBannerUnidade"), est);
         }
+        atualizarSimuladorPorStatus();
         const precisaTimer = reservaEstados.some(l => l.ate);
         if (precisaTimer && !reservaTimer) reservaTimer = setInterval(tickReservas, 1000);
         if (!precisaTimer && reservaTimer) {
@@ -492,11 +504,13 @@
     $("simLotButton").addEventListener("click", () => {
         const lot = window.SKLApp.getSelectedLot();
         if (!lot) return window.SKLApp.showToast("Selecione um lote primeiro.");
+        if (lot.record?.status === "vendido") return window.SKLApp.showToast("Lote vendido — a simulação fica só na Central.");
         window.SKLSimulador.abrir({ valor: lot.record.valor, rotulo: `Quadra ${lot.quadra} · Lote ${lot.lote}`, permiteUsar: false });
     });
     $("simUnitButton").addEventListener("click", () => {
         const unit = window.SKLVertical.getSelectedUnit();
         if (!unit) return;
+        if (unit.status === "vendido") return window.SKLApp?.showToast?.("Unidade vendida — a simulação fica só na Central.");
         window.SKLSimulador.abrir({ valor: unit.valor, rotulo: `Apto ${unit.numero}`, permiteUsar: false });
     });
     $("requestLotButton").addEventListener("click", () => {

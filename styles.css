@@ -736,3 +736,17 @@ summary { color: var(--navy); cursor: pointer; font-weight: 850; }
 .mapa3d-topbar{z-index:20}
 .mapa3d-legend{z-index:20}
 .mapa3d-loading{z-index:20}
+
+/* Mapa interativo no iPhone (2026-09-30): o cabeçalho com o X virou uma faixa própria, sempre ABAIXO
+   do relógio/entalhe (antes ficava por cima do mapa, colado no topo), botão de 44px (tamanho de toque
+   recomendado pela Apple), fundo travado (sem rolagem elástica por trás) e fundo verde igual ao do mapa. */
+.mapa3d-overlay{top:0;left:0;right:0;bottom:0;height:100vh;height:100dvh;overscroll-behavior:none;touch-action:none;background:#b3bc63}
+.mapa3d-topbar{position:relative;flex:none;padding:max(env(safe-area-inset-top,0px),18px) 14px 10px;padding-top:calc(max(env(safe-area-inset-top,0px),18px) + 10px);background:#163d26;box-shadow:0 2px 10px rgba(0,0,0,.25);pointer-events:auto}
+.mapa3d-topbar .close-button{width:44px;height:44px;font-size:24px;background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.35)}
+.mapa3d-heading h2{font-size:14px}
+.mapa3d-container{background:#b3bc63}
+.mapa3d-container .leaflet-container{background:#b3bc63}
+.mapa3d-loading{color:#163d26}
+html.mapa-aberto,html.mapa-aberto body{overflow:hidden;overscroll-behavior:none}
+.mapa3d-heading h2{color:#fff}
+.mapa3d-container .leaflet-bottom.leaflet-right{bottom:calc(env(safe-area-inset-bottom,0px) + 74px)}

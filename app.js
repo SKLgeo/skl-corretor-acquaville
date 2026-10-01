@@ -124,10 +124,12 @@
     }
     async function abrirMapa3D() {
         elements.mapa3dOverlay.hidden = false;
+        document.documentElement.classList.add("mapa-aberto");
         elements.mapa3dLoading.hidden = false;
         if (!mapa3dDados) mapa3dDados = await window.SKLOnline.carregarMapa3D();
         if (!mapa3dDados) {
             elements.mapa3dOverlay.hidden = true;
+            document.documentElement.classList.remove("mapa-aberto");
             showToast("Mapa interativo não disponível para este empreendimento.");
             return;
         }
@@ -187,6 +189,7 @@
     });
     function fecharMapa3D() {
         elements.mapa3dOverlay.hidden = true;
+        document.documentElement.classList.remove("mapa-aberto");
         if (mapa3dInstance) {
             mapa3dInstance.destruir();
             mapa3dInstance = null;
@@ -423,7 +426,10 @@
             layer.setStyle(styleForFeature(feature, key === selectedKey));
             updateLayerTooltip(feature, layer);
         });
-        if (selectedFeature) updateLotCard(selectedFeature);
+        if (selectedFeature) {
+            updateLotCard(selectedFeature);
+            window.SKLReserva?.atualizar?.();
+        }
     }
     function populateQuadras() {
         [ ...quadras.keys() ].sort((a, b) => a - b).forEach(quadra => {
