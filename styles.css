@@ -413,7 +413,8 @@ summary { color: var(--navy); cursor: pointer; font-weight: 850; }
   .app-header { min-height: calc(66px + env(safe-area-inset-top)); padding-left: 11px; padding-right: 9px; }
   .brand img { width: 36px; height: 36px; }
   .brand strong { font-size: 19px; }
-  .brand-kicker, .brand-subtitle { font-size: 6.5px; }
+  .brand-subtitle { font-size: 6.5px; }
+  .brand-kicker { font-size: 8.5px; letter-spacing: .28em; opacity: .9; }
   .header-button { width: 38px; justify-content: center; padding: 7px; }
   .header-button-label { display: none; }
   .header-button-label-compact { display: inline; }
@@ -444,7 +445,12 @@ summary { color: var(--navy); cursor: pointer; font-weight: 850; }
 }
 
 @media (max-width: 390px) {
-  .brand-kicker { display: none; }
+  /* "ACQUA" fica sempre visível — sem ele o celular em pé mostrava só "VILLE" */
+  .brand { flex: none; gap: 7px; }
+  .brand img { width: 32px; height: 32px; }
+  .header-actions { gap: 4px; }
+  .header-button { width: 34px; min-height: 36px; }
+  #mapa3dButton { width: auto; padding: 7px 8px; }
   .search-card { left: 9px; width: calc(100vw - 18px); }
   .primary-button, .secondary-button, .share-card-button { padding-left: 8px; padding-right: 8px; font-size: 11px; }
   .admin-grid { grid-template-columns: 1fr; }
