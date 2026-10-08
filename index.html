@@ -13,6 +13,7 @@
     <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png" />
     <link rel="stylesheet" href="vendor/leaflet/leaflet.css" />
     <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="avatar.css" />
   </head>
   <body>
     <section id="authView" class="auth-view">
@@ -325,6 +326,7 @@
         <button class="close-button dialog-close" type="button" aria-label="Fechar">×</button>
         <span class="eyebrow">MINHA CONTA</span>
         <h2 id="vtAccountName">Corretor</h2>
+        <section class="admin-card"><div id="vtFotoPainel"></div></section>
         <p class="dialog-intro">As disponibilidades, reservas, vendas e valores são publicados pela Central de Vendas.</p>
 
         <section class="admin-card account-summary">
@@ -381,6 +383,7 @@
         <button class="close-button dialog-close" type="button" aria-label="Fechar">×</button>
         <span class="eyebrow">MINHA CONTA</span>
         <h2 id="brokerAccountName">Corretor</h2>
+        <section class="admin-card"><div id="brokerFotoPainel"></div></section>
         <p class="dialog-intro">As disponibilidades, reservas, vendas e valores são publicados pela Central de Vendas.</p>
 
         <section class="admin-card account-summary">
@@ -513,6 +516,7 @@
     <script src="vendor/firebase/firebase-app-compat.js"></script>
     <script src="vendor/firebase/firebase-messaging-compat.js"></script>
     <script src="push-web.js"></script>
+    <script src="avatar.js"></script>
     <script src="online.js"></script>
   </body>
 </html>

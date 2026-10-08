@@ -9,7 +9,7 @@
     // mesmo que a conta logada também tenha vínculo em outros empreendimentos
     // (Base, Aurora, etc.) por algum outro motivo.
     const SLUGS_PERMITIDOS = [ "acquaville" ];
-    const APP_VERSION = "0.3.3";
+    const APP_VERSION = "0.3.4";
     if ($("brokerAppVersion")) $("brokerAppVersion").textContent = APP_VERSION;
     const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
         auth: {
@@ -119,6 +119,7 @@
         document.getElementById("app").hidden = false;
         sb.auth.getUser().then(({data: data}) => {
             $("brokerAccountName").textContent = data?.user?.user_metadata?.nome_exibicao || "Corretor";
+            if (window.SKLAvatar) { window.SKLAvatar.init(sb); window.SKLAvatar.painelDoUsuarioLogado($("brokerFotoPainel")); }
         });
         updateConnection(true);
         sync(false);
@@ -140,6 +141,7 @@
         empreendimentoPicker.hidden = true;
         sb.auth.getUser().then(({data: data}) => {
             $("vtAccountName").textContent = data?.user?.user_metadata?.nome_exibicao || "Corretor";
+            if (window.SKLAvatar) { window.SKLAvatar.init(sb); window.SKLAvatar.painelDoUsuarioLogado($("vtFotoPainel")); }
         });
         $("vtAppVersion").textContent = APP_VERSION;
         $("vtConnectionText").textContent = "Conectado à Central";

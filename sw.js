@@ -1,10 +1,12 @@
-const CACHE_NAME = "skl-acquaville-corretor-v11";
+const CACHE_NAME = "skl-acquaville-corretor-v12";
 const CORE_ASSETS = [
   "./",
   "./index.html",
   "./styles.css",
   "./app.js",
   "./online.js",
+  "./avatar.js",
+  "./avatar.css",
   "./manifest.webmanifest",
   "./data/lotes.js",
   "./vendor/leaflet/leaflet.css",
