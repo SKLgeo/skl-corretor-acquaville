@@ -9,7 +9,7 @@
     // mesmo que a conta logada também tenha vínculo em outros empreendimentos
     // (Base, Aurora, etc.) por algum outro motivo.
     const SLUGS_PERMITIDOS = [ "acquaville" ];
-    const APP_VERSION = "0.3.7";
+    const APP_VERSION = "0.3.8";
     if ($("brokerAppVersion")) $("brokerAppVersion").textContent = APP_VERSION;
     const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
         auth: {
@@ -211,6 +211,13 @@
         requestContext.sim = sim;
         window.SKLSimulador.montarBlocoReserva($("requestSimBloco"), alvoSimulacaoAtual);
     }
+    // Último acesso visto pela Central (tela Usuários): ao entrar e sempre que o app volta para a tela.
+    function registrarMeuAcesso() {
+        if (empreendimentoId) sb.rpc("registrar_acesso", { p_empreendimento_id: empreendimentoId }).then(() => {}, () => {});
+    }
+    document.addEventListener("visibilitychange", () => {
+        if (document.visibilityState === "visible") registrarMeuAcesso();
+    });
     function entrarNoEmpreendimento(emp) {
         window.SKLApp?.resetMapa3D?.();
         window.SKLApp?.resetFormasPagamento?.();
@@ -220,6 +227,7 @@
             localStorage.setItem(EMPREENDIMENTO_ESCOLHIDO_KEY, emp.id);
         } catch {}
         iniciarSimulador(emp.id);
+        registrarMeuAcesso();
         if (emp.tipo === "vertical") enterVerticalApp(); else enterApp();
     }
     async function resolverEmpreendimentoEEntrar() {
